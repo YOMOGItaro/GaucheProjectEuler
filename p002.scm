@@ -7,25 +7,11 @@
 ;; By considering the terms in the Fibonacci sequence 
 ;; whose values do not exceed four million, find the sum of the even-valued terms.
 
+(add-load-path ".")
+(use util.fibonacci)
+
+
 (define four-million 4000000)
 
 
-;(sum-of-even-fib four-million)
-(define (sum-of-even-fib limitval)
-  (define (sum-of-even-fib-iter sum iter)
-    (cond
-     ((> (fibonacci iter) limitval) sum)
-     ((odd? (fibonacci iter)) (sum-of-even-fib-iter sum (+ iter 1)))
-     (else (sum-of-even-fib-iter (+ sum (fibonacci iter)) (+ iter 1)))))
-  (sum-of-even-fib-iter 0 1))
-
-
-;(fibonacci 4)
-(define (fibonacci num)
-  (define (fib-iter now next iter)
-    (if (> iter num)
-	now
-	(fib-iter next (+ now next) (+ iter 1))))
-  (fib-iter 1 1 1))
-
-
+(sum-of-even-fib four-million)
