@@ -1,9 +1,13 @@
-(define-module stdutils
+(define-module util.stdutils
   (export-all))
-(select-module stdutils)
+(select-module util.stdutils)
 
 
 (define nil '())
 
 
-(provide "stdutils")
+(define (superior arg1 arg2)
+  (if (> arg1 arg2) arg1 arg2))
+
+
+(provide "util.stdutils")
