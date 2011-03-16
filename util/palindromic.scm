@@ -6,13 +6,16 @@
 ;(palindrome-from-product-of-two-3-digit)
 (define (palindrome-from-product-of-two-3-digit)
   (define (pfpot3d-iter pair max)
+    (define (pfpot3d-iter-next pmult)
+      (cond
+       ((and (palindromic? pmult) (< max pmult))
+	(pfpot3d-iter (three-digit-pair-next pair) pmult))
+       (else
+	(pfpot3d-iter (three-digit-pair-next pair) max))))
     (cond
      ((and (>= (car pair) 999) (>= (cdr pair) 999))
       max)
-     ((and (palindromic? (pair-multi pair)) (< max (pair-multi pair)))
-      (pfpot3d-iter (three-digit-pair-next pair) (pair-multi pair)))
-     (else
-      (pfpot3d-iter (three-digit-pair-next pair) max))))
+     (else (pfpot3d-iter-next (pair-multi pair)))))
   (pfpot3d-iter '(100 . 100) 10201))
 
 

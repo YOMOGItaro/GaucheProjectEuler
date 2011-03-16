@@ -4,7 +4,7 @@
 
 ;; Find the largest palindrome made from the product of two 3-digit numbers.
 
-; 580085
+; 906609
 
 (add-load-path ".")
 (use util.palindromic)
