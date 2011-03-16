@@ -1,4 +1,4 @@
-(define-module util.palindromic
+y(define-module util.palindromic
   (export-all))
 (select-module util.palindromic)
 
