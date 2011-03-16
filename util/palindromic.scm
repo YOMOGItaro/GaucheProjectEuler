@@ -9,7 +9,7 @@
     (cond
      ((and (>= (car pair) 999) (>= (cdr pair) 999))
       max)
-     ((palindromic? (pair-multi pair))
+     ((and (palindromic? (pair-multi pair)) (< max (pair-multi pair)))
       (pfpot3d-iter (three-digit-pair-next pair) (pair-multi pair)))
      (else
       (pfpot3d-iter (three-digit-pair-next pair) max))))
@@ -41,7 +41,7 @@
 ;(three-digit-pair-next '(998 . 100))
 (define (three-digit-pair-next pair)
   (cond
-   ((>= (car pair) 999) (cons 100 (+ (cdr pair) 1)))
+   ((>= (car pair) 999) (cons  (+ (cdr pair) 1) (+ (cdr pair) 1)))
    (else (cons (+ (car pair) 1) (cdr pair)))))
 
 
