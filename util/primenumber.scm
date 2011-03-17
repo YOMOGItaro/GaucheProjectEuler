@@ -1,4 +1,5 @@
 (define-module util.primenumber
+  (use srfi-27) ;for random
   (export-all))
 (select-module util.primenumber)
 
@@ -25,8 +26,8 @@
   (next-prime-iter (+ now 1)))
 
 
-(define (prime? num)
-  (= num (smallest-divisor num)))
+;; (define (prime? num)
+;;   (= num (smallest-divisor num)))
 
 
 (define (smallest-divisor num)
@@ -41,6 +42,40 @@
 
 (define (divides? num divnum)
   (= (remainder num divnum) 0))
+
+
+(define (prime? num)
+  (fast-prime? num 1000))
+
+
+;(fast-prime? 17 10)
+(define (fast-prime? num times)
+  (cond
+   ((= times 0) #t)
+   ((fermat-test num) (fast-prime? num (- times 1)))
+   (else #f)))
+
+
+(define (fermat-test num)
+  (define (try-it a)
+    (= (expmod a num num) a))
+  (try-it (+ (random-integer (- num 1)) 1)))
+
+
+;(expmod 1 2 3)
+(define (expmod base exp m)
+  (cond
+   ((= exp 0) 1)
+   ((even? exp)
+    (remainder (square (expmod base (/ exp 2) m))
+	       m))
+    (else
+    (remainder (* base (expmod base(- exp 1) m))
+	       m))))
+
+
+(define (square num)
+  (* num num))
 
 
 
