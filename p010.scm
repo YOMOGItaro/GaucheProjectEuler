@@ -4,20 +4,40 @@
 
 (add-load-path ".")
 (use util.primenumber)
-
+(use srfi-1)
 
 (define two-million 2000000)
 
 
-(define (sum-of-primes-below num)
-  (define (sum-of-primes-below-iter total now)
-    (print now)
-    (if (>= now num)
-	total
-	(sum-of-primes-below-iter
-	 (+ total now)
-	 (next-prime now))))
-  (sum-of-primes-below-iter 0 first-prime-number))
-
-(sum-of-primes-below 10)
 (sum-of-primes-below two-million)
+(define (sum-of-primes-below num)
+  (print (fold + 0 (prime-list num))))
+
+
+(prime-list 100000)
+;(prime-list 10)
+;(prime-list two-million)
+(define (prime-list num)
+  (define (prime-list-iter iter pool)
+    (print iter)
+    (if (> iter num)
+	pool
+	(prime-list-iter (+ iter 1) (delete-product iter num pool))))
+  (prime-list-iter 2 (enum 2 num)))
+
+
+(define (delete-product num max pool)
+  (define (delete-product-iter iter pool)
+    (if (> iter max)
+	pool
+	(delete-product-iter (+ iter num) (delete iter pool))))
+  (delete-product-iter (+ num num) pool))
+
+
+(car (enum 2 two-million))
+(define (enum prime last)
+  (define (enum-iter lis iter)
+    (if (< iter prime)
+	lis
+	(enum-iter (cons iter lis) (- iter 1))))
+  (enum-iter '() last))
