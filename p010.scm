@@ -3,41 +3,57 @@
 ;; Find the sum of all the primes below two million.
 
 (add-load-path ".")
-(use util.primenumber)
-(use srfi-1)
+;(use util.primenumber)
+;(use srfi-1)
 
 (define two-million 2000000)
 
 
-(sum-of-primes-below two-million)
-(define (sum-of-primes-below num)
-  (print (fold + 0 (prime-list num))))
+;; (sum-of-primes-below two-million)
+;; (sum-of-primes-below 10)
+;; (define (sum-of-primes-below num)
+;;   (define (sum-of-primes-below-iter total iter)
+;;     (define next-total
+;;       (cond
+;;        ((> (* iter 2) num) (print iter) (+ total iter))
+;;        (else (print iter (- (* iter 2))) (- (+ total iter) (* iter 2)))))
+;;     (if (>= iter num)
+;; 	total
+;; 	(sum-of-primes-below-iter next-total (+ iter 1))))
+;;   (sum-of-primes-below-iter 0 ))
 
 
-(prime-list 100000)
-;(prime-list 10)
-;(prime-list two-million)
-(define (prime-list num)
-  (define (prime-list-iter iter pool)
-    (print iter)
-    (if (> iter num)
-	pool
-	(prime-list-iter (+ iter 1) (delete-product iter num pool))))
-  (prime-list-iter 2 (enum 2 num)))
+;; (fold + 0 (enum 2 100))
+;; (fold + 0 (enum 2 (- two-million 1)))
+;; (define (enum from to)
+;;   (define (enum-iter iter pool)
+;;     (if (< iter from) pool (enum-iter (- iter 1) (cons iter pool))))
+;;   (enum-iter to '()))
 
 
-(define (delete-product num max pool)
-  (define (delete-product-iter iter pool)
-    (if (> iter max)
-	pool
-	(delete-product-iter (+ iter num) (delete iter pool))))
-  (delete-product-iter (+ num num) pool))
+(use util.stream)
+;(sum-primes 1 2)
 
 
-(car (enum 2 two-million))
-(define (enum prime last)
-  (define (enum-iter lis iter)
-    (if (< iter prime)
-	lis
-	(enum-iter (cons iter lis) (- iter 1))))
-  (enum-iter '() last))
+(define (divisible? number divisor)
+  (= (remainder number divisor) 0))
+
+;(sieve (stream-iota -1 2))
+
+(define (sieve stream)
+  (stream-cons
+   (stream-car stream)
+   (sieve (stream-filter
+	   (lambda (x)
+	     (not (divisible? x (stream-car stream))))
+	   (stream-cdr stream)))))
+
+
+(define (intergers-starting-from n)
+  (stream-cons n (intergers-starting-from (+ n 1))))
+
+
+(define primes (sieve (intergers-starting-from 2)))
+
+
+(stream-ref primes 2501)
